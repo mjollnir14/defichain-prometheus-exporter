@@ -15,6 +15,9 @@ POLL_INTERVAL = 111       # In seconds
 DEFICHAIN_VERSION = Gauge('defichain_version', 'defid version')
 DEFICHAIN_BLOCKS = Gauge('defichain_blocks', 'Block height')
 DEFICHAIN_IS_OPERATOR = Gauge('defichain_is_operator', 'isOperator bool')
+DEFICHAIN_GENERATE = Gauge('defichain_generate', 'node generate bool')
+DEFICHAIN_STATE = Gauge('defichain_state', 'node state bool')
+DEFICHAIN_MINTEDBLOCKS = Gauge('defichain_mintedblocks', 'minted blocks since masternode creation')
 
 DEFICHAIN_DIFFICULTY = Gauge('defichain_difficulty', 'Difficulty')
 DEFICHAIN_PEERS = Gauge('defichain_peers', 'Number of peers')
@@ -86,6 +89,30 @@ def main():
          DEFICHAIN_VERSION.set(versioninfo['numericVersion'])
          DEFICHAIN_BLOCKS.set(blockcount)
          DEFICHAIN_IS_OPERATOR.set(minting_info['isoperator'])
+
+         masternodes = minting_info['masternodes']
+
+         generate = masternodes[0]['generate']
+
+         if generate is None:
+             print('Error parsing generate item')
+         elif generate:
+             DEFICHAIN_GENERATE.set(1)
+         else:
+             DEFICHAIN_GENERATE.set(0)
+
+         state = masternodes[0]['state']
+
+         if state is None:
+             print('Error parsing generate item')
+         elif state == 'ENABLED':
+             DEFICHAIN_STATE.set(1)
+         else:
+             DEFICHAIN_STATE.set(0)
+
+         mintedblocks = masternodes[0]['mintedblocks']
+         DEFICHAIN_MINTEDBLOCKS.set(mintedblocks)
+
 #        DEFICHAIN_PEERS.set(info['connections'])
 #        DEFICHAIN_DIFFICULTY.set(info['difficulty'])
 #        DEFICHAIN_HASHPS.set(hashps)
