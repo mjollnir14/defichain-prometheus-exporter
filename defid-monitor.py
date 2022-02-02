@@ -8,12 +8,14 @@ import sys
 from prometheus_client import start_http_server, Gauge, Counter
 
 # General vars
-POLL_TIME = 300
 DEFICHAIN_CLI_PATH = '/home/defichain/.defi/bin/defi-cli'
+POLL_INTERVAL = 111       # In seconds
 
 # Create Prometheus metrics to track defichaind stats.
 DEFICHAIN_VERSION = Gauge('defichain_version', 'defid version')
 DEFICHAIN_BLOCKS = Gauge('defichain_blocks', 'Block height')
+DEFICHAIN_IS_OPERATOR = Gauge('defichain_is_operator', 'isOperator bool')
+
 DEFICHAIN_DIFFICULTY = Gauge('defichain_difficulty', 'Difficulty')
 DEFICHAIN_PEERS = Gauge('defichain_peers', 'Number of peers')
 DEFICHAIN_HASHPS = Gauge('defichain_hashps', 'Estimated network hash rate per second')
@@ -74,6 +76,7 @@ def main():
     while True:
          versioninfo = defichain('getversioninfo')
          blockcount = defichain('getblockcount')
+         minting_info = defichain('getmintinginfo')
 #        chaintips = len(defichain('getchaintips'))
 #        mempool = defichain('getmempoolinfo')
 #        nettotals = defichain('getnettotals')
@@ -82,6 +85,7 @@ def main():
 
          DEFICHAIN_VERSION.set(versioninfo['numericVersion'])
          DEFICHAIN_BLOCKS.set(blockcount)
+         DEFICHAIN_IS_OPERATOR.set(minting_info['isoperator'])
 #        DEFICHAIN_PEERS.set(info['connections'])
 #        DEFICHAIN_DIFFICULTY.set(info['difficulty'])
 #        DEFICHAIN_HASHPS.set(hashps)
@@ -116,7 +120,7 @@ def main():
 #            DEFICHAIN_LATEST_BLOCK_OUTPUTS.set(outputs)
     
          print('.')
-         time.sleep(POLL_TIME)
+         time.sleep(POLL_INTERVAL)
 
 if __name__ == '__main__':
     main()

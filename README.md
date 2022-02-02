@@ -18,9 +18,14 @@ You can then build queries and alerting rules from this data. This code is targe
 
 An exporter setup as a scrape target may be local or remote. Prometheus is a great backend for a visualization and analytics software such as [Grafana](https://grafana.com).
 
+### Setup
+
+Be sure to change path to your defi-cli binary inside defid-monitor.py (DEFICHAIN_CLI_PATH var)
+
+
 ### Testing and requirements
 
-To see it in action, run `defid-monitor.py` and navigate to http://127.0.0.1:8334 in your browser.
+To see it in action, run `python defid-monitor.py` and navigate to http://127.0.0.1:8334 in your browser.
 
 Ensure that `prometheus_client` is installed via pip. If you're using Python 2, then the `whichcraft` module is another requirement.
 
