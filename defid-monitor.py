@@ -6,6 +6,8 @@ import time
 import subprocess
 import sys
 from prometheus_client import start_http_server, Gauge, Counter
+from dateutil import parser
+from datetime import datetime; from dateutil.relativedelta import *; from dateutil.tz import *
 
 # General vars
 DEFICHAIN_CLI_PATH = '/home/defichain/.defi/bin/defi-cli'
@@ -112,6 +114,22 @@ def main():
 
          mintedblocks = masternodes[0]['mintedblocks']
          DEFICHAIN_MINTEDBLOCKS.set(mintedblocks)
+
+         lastblockcreationattempt_iso8601 = masternodes[0]['lastblockcreationattempt']
+         #print(lastblockcreationattempt_iso8601)
+
+         lastblockcreationattempt = parser.parse(lastblockcreationattempt_iso8601)
+         print('lastblockcreationattempt: ', lastblockcreationattempt)
+
+         time_now = datetime.now(tzlocal())
+         print('time_now: ', time_now)
+
+         delta = relativedelta(time_now, lastblockcreationattempt).normalized()
+#         delta2 = relativedelta(time_now, time_now)
+
+         print('delta: ', delta)
+#         print(delta2)
+#         print(lastblockcreationattempt-6000)
 
 #        DEFICHAIN_PEERS.set(info['connections'])
 #        DEFICHAIN_DIFFICULTY.set(info['difficulty'])

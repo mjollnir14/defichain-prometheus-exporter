@@ -22,10 +22,14 @@ An exporter setup as a scrape target may be local or remote. Prometheus is a gre
 
 Be sure to change path to your defi-cli binary inside defid-monitor.py (DEFICHAIN_CLI_PATH var)
 
+Install dateutil:
+```
+pip3 install python-dateutil
+```
 
 ### Testing and requirements
 
-To see it in action, run `python defid-monitor.py` and navigate to http://127.0.0.1:8334 in your browser.
+To see it in action, run `python3 defid-monitor.py` and navigate to http://127.0.0.1:8334 in your browser.
 
 Ensure that `prometheus_client` is installed via pip. If you're using Python 2, then the `whichcraft` module is another requirement.
 
