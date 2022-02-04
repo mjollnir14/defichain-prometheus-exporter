@@ -11,7 +11,7 @@ from datetime import datetime; from dateutil.relativedelta import *; from dateut
 
 # General vars
 DEFICHAIN_CLI_PATH = '/home/defichain/.defi/bin/defi-cli'
-POLL_INTERVAL = 111       # In seconds
+POLL_INTERVAL = 14       # In seconds
 
 # Create Prometheus metrics to track defichaind stats.
 DEFICHAIN_VERSION = Gauge('defichain_version', 'defid version')
@@ -20,6 +20,8 @@ DEFICHAIN_IS_OPERATOR = Gauge('defichain_is_operator', 'isOperator bool')
 DEFICHAIN_GENERATE = Gauge('defichain_generate', 'node generate bool')
 DEFICHAIN_STATE = Gauge('defichain_state', 'node state bool')
 DEFICHAIN_MINTEDBLOCKS = Gauge('defichain_mintedblocks', 'minted blocks since masternode creation')
+
+DEFICHAIN_DELTA_LASTBLOCK_ATTEMPT = Gauge('defichain_delta_lastblock_attempt', 'Elapsed seconds since last block creation attempt. Should be less than 2 seconds')
 
 DEFICHAIN_DIFFICULTY = Gauge('defichain_difficulty', 'Difficulty')
 DEFICHAIN_PEERS = Gauge('defichain_peers', 'Number of peers')
@@ -125,11 +127,12 @@ def main():
          print('time_now: ', time_now)
 
          delta = relativedelta(time_now, lastblockcreationattempt).normalized()
-#         delta2 = relativedelta(time_now, time_now)
 
          print('delta: ', delta)
-#         print(delta2)
-#         print(lastblockcreationattempt-6000)
+         delta_lastblock_attempt = delta.days*3600*24+delta.hours*3600+delta.minutes*60+delta.seconds+delta.microseconds/1000000
+         DEFICHAIN_DELTA_LASTBLOCK_ATTEMPT.set(delta_lastblock_attempt)
+
+         print('delta_lastblock_attempt: ', delta_lastblock_attempt)
 
 #        DEFICHAIN_PEERS.set(info['connections'])
 #        DEFICHAIN_DIFFICULTY.set(info['difficulty'])
