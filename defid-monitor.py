@@ -20,6 +20,10 @@ DEFICHAIN_IS_OPERATOR = Gauge('defichain_is_operator', 'isOperator bool')
 DEFICHAIN_GENERATE = Gauge('defichain_generate', 'node generate bool')
 DEFICHAIN_STATE = Gauge('defichain_state', 'node state bool')
 DEFICHAIN_MINTEDBLOCKS = Gauge('defichain_mintedblocks', 'minted blocks since masternode creation')
+DEFICHAIN_TM1 = Gauge('defichain_tm1', 'target multiplier 1')
+DEFICHAIN_TM2 = Gauge('defichain_tm2', 'target multiplier 2')
+DEFICHAIN_TM3 = Gauge('defichain_tm3', 'target multiplier 3')
+DEFICHAIN_TM4 = Gauge('defichain_tm4', 'target multiplier 4')
 
 DEFICHAIN_DELTA_LASTBLOCK_ATTEMPT = Gauge('defichain_delta_lastblock_attempt', 'Elapsed seconds since last block creation attempt. Should be less than 2 seconds')
 
@@ -117,22 +121,21 @@ def main():
          mintedblocks = masternodes[0]['mintedblocks']
          DEFICHAIN_MINTEDBLOCKS.set(mintedblocks)
 
-         lastblockcreationattempt_iso8601 = masternodes[0]['lastblockcreationattempt']
-         #print(lastblockcreationattempt_iso8601)
+         targetMultipliers = masternodes[0]['targetMultipliers']
+         tm1 = targetMultipliers[0]
+         tm2 = targetMultipliers[1]
 
+         DEFICHAIN_TM1.set(tm1)
+         DEFICHAIN_TM2.set(tm2)
+
+         lastblockcreationattempt_iso8601 = masternodes[0]['lastblockcreationattempt']
          lastblockcreationattempt = parser.parse(lastblockcreationattempt_iso8601)
-         print('lastblockcreationattempt: ', lastblockcreationattempt)
 
          time_now = datetime.now(tzlocal())
-         print('time_now: ', time_now)
-
          delta = relativedelta(time_now, lastblockcreationattempt).normalized()
 
-         print('delta: ', delta)
          delta_lastblock_attempt = delta.days*3600*24+delta.hours*3600+delta.minutes*60+delta.seconds+delta.microseconds/1000000
          DEFICHAIN_DELTA_LASTBLOCK_ATTEMPT.set(delta_lastblock_attempt)
-
-         print('delta_lastblock_attempt: ', delta_lastblock_attempt)
 
 #        DEFICHAIN_PEERS.set(info['connections'])
 #        DEFICHAIN_DIFFICULTY.set(info['difficulty'])

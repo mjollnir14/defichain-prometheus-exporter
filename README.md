@@ -52,3 +52,9 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
+
+### TODO
+
+- Use the correct metrics: refer to https://prometheus.io/docs/concepts/metric_types/
+- Get peerinfo (number of neighbors)
+- Don't send values TM3 and TM4 when empty
