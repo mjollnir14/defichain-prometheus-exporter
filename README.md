@@ -59,6 +59,9 @@ WantedBy=multi-user.target
 
 ### TODO
 
-- Use the correct metrics: refer to https://prometheus.io/docs/concepts/metric_types/
+- Use the correct type of metrics: refer to https://prometheus.io/docs/concepts/metric_types/
 - Get peerinfo (number of neighbors)
-- Don't send values TM3 and TM4 when empty
+- Don't send values TM3 and TM4 when empty?
+- Uptime
+- Network stats
+- Mempool stats

@@ -27,27 +27,15 @@ DEFICHAIN_TM4 = Gauge('defichain_tm4', 'target multiplier 4')
 
 DEFICHAIN_DELTA_LASTBLOCK_ATTEMPT = Gauge('defichain_delta_lastblock_attempt', 'Elapsed seconds since last block creation attempt. Should be less than 2 seconds')
 
-DEFICHAIN_DIFFICULTY = Gauge('defichain_difficulty', 'Difficulty')
-DEFICHAIN_PEERS = Gauge('defichain_peers', 'Number of peers')
-DEFICHAIN_HASHPS = Gauge('defichain_hashps', 'Estimated network hash rate per second')
+#DEFICHAIN_PEERS = Gauge('defichain_peers', 'Number of peers')
+#DEFICHAIN_UPTIME = Gauge('defichain_uptime', 'Number of seconds the Defichain daemon has been running')
 
-DEFICHAIN_ERRORS = Counter('defichain_errors', 'Number of errors detected')
-DEFICHAIN_UPTIME = Gauge('defichain_uptime', 'Number of seconds the Defichain daemon has been running')
+#DEFICHAIN_MEMPOOL_BYTES = Gauge('defichain_mempool_bytes', 'Size of mempool in bytes')
+#DEFICHAIN_MEMPOOL_SIZE = Gauge('defichain_mempool_size', 'Number of unconfirmed transactions in mempool')
 
-DEFICHAIN_MEMPOOL_BYTES = Gauge('defichain_mempool_bytes', 'Size of mempool in bytes')
-DEFICHAIN_MEMPOOL_SIZE = Gauge('defichain_mempool_size', 'Number of unconfirmed transactions in mempool')
 
-DEFICHAIN_LATEST_BLOCK_SIZE = Gauge('defichain_latest_block_size', 'Size of latest block in bytes')
-DEFICHAIN_LATEST_BLOCK_TXS = Gauge('defichain_latest_block_txs', 'Number of transactions in latest block')
-
-DEFICHAIN_NUM_CHAINTIPS = Gauge('defichain_num_chaintips', 'Number of known blockchain branches')
-
-DEFICHAIN_TOTAL_BYTES_RECV = Gauge('defichain_total_bytes_recv', 'Total bytes received')
-DEFICHAIN_TOTAL_BYTES_SENT = Gauge('defichain_total_bytes_sent', 'Total bytes sent')
-
-DEFICHAIN_LATEST_BLOCK_INPUTS = Gauge('defichain_latest_block_inputs', 'Number of inputs in transactions of latest block')
-DEFICHAIN_LATEST_BLOCK_OUTPUTS = Gauge('defichain_latest_block_outputs', 'Number of outputs in transactions of latest block')
-
+#DEFICHAIN_TOTAL_BYTES_RECV = Gauge('defichain_total_bytes_recv', 'Total bytes received')
+#DEFICHAIN_TOTAL_BYTES_SENT = Gauge('defichain_total_bytes_sent', 'Total bytes sent')
 
 def defichain(cmd):
     defichain = subprocess.Popen([DEFICHAIN_CLI_PATH, cmd], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -88,11 +76,6 @@ def main():
          versioninfo = defichain('getversioninfo')
          blockcount = defichain('getblockcount')
          minting_info = defichain('getmintinginfo')
-#        chaintips = len(defichain('getchaintips'))
-#        mempool = defichain('getmempoolinfo')
-#        nettotals = defichain('getnettotals')
-#         latest_block = get_block(str(blockcount))
-#        hashps = float(defichaincli('getnetworkhashps'))
 
          DEFICHAIN_VERSION.set(versioninfo['numericVersion'])
          DEFICHAIN_BLOCKS.set(blockcount)
@@ -137,40 +120,6 @@ def main():
          delta_lastblock_attempt = delta.days*3600*24+delta.hours*3600+delta.minutes*60+delta.seconds+delta.microseconds/1000000
          DEFICHAIN_DELTA_LASTBLOCK_ATTEMPT.set(delta_lastblock_attempt)
 
-#        DEFICHAIN_PEERS.set(info['connections'])
-#        DEFICHAIN_DIFFICULTY.set(info['difficulty'])
-#        DEFICHAIN_HASHPS.set(hashps)
-
-#        if info['errors']:
-#            DEFICHAIN_ERRORS.inc()
-
-#        DEFICHAIN_NUM_CHAINTIPS.set(chaintips)
-
-#        DEFICHAIN_MEMPOOL_BYTES.set(mempool['bytes'])
-#        DEFICHAIN_MEMPOOL_SIZE.set(mempool['size'])
-
-#        DEFICHAIN_TOTAL_BYTES_RECV.set(nettotals['totalbytesrecv'])
-#        DEFICHAIN_TOTAL_BYTES_SENT.set(nettotals['totalbytessent'])
-
-#        if latest_block is not None:
-#            DEFICHAIN_LATEST_BLOCK_SIZE.set(latest_block['size'])
-#            DEFICHAIN_LATEST_BLOCK_TXS.set(len(latest_block['tx']))
-#            inputs, outputs = 0, 0
-            # counting transaction inputs and outputs requires txindex=1
-            # to be enabled, which may also necessitate reindex=1 in defichain.conf
-#            for tx in latest_block['tx']:
-
-#                if get_raw_tx(tx) is not None:
-#                    rawtx = get_raw_tx(tx)
-#                    i = len(rawtx['vin'])
-#                   inputs += i
-#                    o = len(rawtx['vout'])
-#                    outputs += o
-
-#            DEFICHAIN_LATEST_BLOCK_INPUTS.set(inputs)
-#            DEFICHAIN_LATEST_BLOCK_OUTPUTS.set(outputs)
-    
-         print('.')
          time.sleep(POLL_INTERVAL)
 
 if __name__ == '__main__':
