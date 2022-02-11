@@ -8,6 +8,10 @@ This is a script written in Python intended to run alongside a Defichain node an
 
 It tracks stuff like: block height, difficulty, number of peers, network hash rate, errors, uptime in seconds, mempool size, size of recent blocks, number of transactions within blocks, chaintips, total bytes received and sent, and transaction inputs and outputs. These Defichain metrics are refreshed once every 5 minutes.
 
+### Screenshot
+
+![Screenshot](./docs/screenshot-grafana.png)
+
 ### How it works
 
 [Prometheus](https://prometheus.io) is a monitoring system and time-series database.
