@@ -26,6 +26,11 @@ An exporter setup as a scrape target may be local or remote. Prometheus is a gre
 
 Be sure to change path to your defi-cli binary inside defid-monitor.py (DEFICHAIN_CLI_PATH var)
 
+```
+# General vars
+DEFICHAIN_CLI_PATH = '/home/defichain/.defi/bin/defi-cli'
+```
+
 Install dateutil:
 ```
 pip3 install python-dateutil
@@ -59,9 +64,10 @@ WantedBy=multi-user.target
 
 ### TODO
 
+- Look for defid in PATH, avoiding manual configuration
 - Use the correct type of metrics: refer to https://prometheus.io/docs/concepts/metric_types/
 - Get peerinfo (number of neighbors)
-- Don't send values TM3 and TM4 when empty?
+- Don't send values TM3 and TM4 when empty (unlocked nodes) ?
 - Uptime
 - Network stats
 - Mempool stats
