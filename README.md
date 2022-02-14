@@ -4,9 +4,11 @@ Defichain monitor script -> prometheus scraping -> grafana dashboard
 
 Forked from https://gist.github.com/ageis/a0623ae6ec9cfc72e5cb6bde5754ab1f#file-bitcoind-monitor-py
 
-This is a script written in Python intended to run alongside a Defichain node and export statistics for monitoring purposes. It assumes the existence of defi-cli in the PATH and access to the RPC interface over localhost.
+This is a script written in Python intended to run alongside a Defichain node and export statistics for monitoring purposes.
 
-It tracks stuff like: block height, difficulty, number of peers, network hash rate, errors, uptime in seconds, mempool size, size of recent blocks, number of transactions within blocks, chaintips, total bytes received and sent, and transaction inputs and outputs. These Defichain metrics are refreshed once every 5 minutes.
+It tracks metrics like: block height, last block creation attempt, minted blocks, multipliers.
+
+These Defichain metrics are refreshed once every x seconds (configurable with variable POLL_INTERVAL).
 
 ### Screenshot
 
@@ -31,16 +33,18 @@ Be sure to change path to your defi-cli binary inside defid-monitor.py (DEFICHAI
 DEFICHAIN_CLI_PATH = '/home/defichain/.defi/bin/defi-cli'
 ```
 
-Install dateutil:
+Install dateutil and prometheus_client:
 ```
-pip3 install python-dateutil
+pip3 install python-dateutil prometheus_client
 ```
 
 ### Testing and requirements
 
 To see it in action, run `python3 defid-monitor.py` and navigate to http://127.0.0.1:8334 in your browser.
 
-Ensure that `prometheus_client` is installed via pip. If you're using Python 2, then the `whichcraft` module is another requirement.
+Configure new target on your prometheus backend to fetch on http://your_public_ip:8334
+
+Import the provided 'Grafana-Defichain-dashboard.json' file into your Grafana interface
 
 ### Running as a service
 
